@@ -1,0 +1,1 @@
+<!-- displays the notifications that associated with that user, and allows the user to delete them without having to reload the page each time he does so -->

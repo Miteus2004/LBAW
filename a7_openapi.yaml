@@ -1,0 +1,1085 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: 'https://virtserver.swaggerhub.com/grupo_lbaw_2425/projeto_lbaw_2425_openapi/1.0.0'
+info:
+  version: 1.0.0
+  title: FEUPshare-api
+  description: The Web API for FEUPshare
+
+tags:
+  - name: 'M01: Authentication'
+  - name: 'M02: Profile'
+  - name: 'M03: Questions'
+  - name: 'M04: Answers'
+  - name: 'M05: Comments'
+  - name: 'M06: Search'
+  - name: 'M07: Notifications'
+  - name: 'M08: Static Pages' 
+
+paths:
+  /:
+    get:
+      summary: "Home Page"
+      description: "Home page loaded successfully. Access : PUB"
+      operationId: indexHome
+      tags:
+        - "M03: Questions"
+      responses:
+        '200':
+          description: "Home page loaded successfully. Access : PUB"
+
+  /login:
+    get:
+      summary: "Show Login Form"
+      description: "Login form displayed. Access : PUB"
+      operationId: showLoginForm
+      tags:
+        - "M01: Authentication"
+      responses:
+        '200':
+          description: "Login form displayed. Access : PUB"
+    post:
+      summary: "Authenticate User"
+      description: "Authenticate user and redirect. Access: USR"
+      operationId: authenticateUser
+      tags:
+        - "M01: Authentication"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '302':
+          description: "Redirect after authentication. Access : USR"
+
+  /logout:
+    post:
+      summary: "Logout User"
+      description: "Logout user and redirect. Access: USR, MOD, ADM"
+      operationId: logoutUser
+      tags:
+        - "M01: Authentication"
+      responses:
+        '302':
+          description: "Redirect after logout."
+
+  /register:
+    get:
+      summary: "Show Registration Form"
+      description: "Registration form displayed. Access: PUB"
+      operationId: showRegistrationForm
+      tags:
+        - "M01: Authentication"
+      responses:
+        '200':
+          description: "Registration form displayed. Access: PUB"
+    post:
+      summary: "Register New User"
+      description: "Register new user and redirect. Access: PUB"
+      operationId: registerUser
+      tags:
+        - "M01: Authentication"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                password_confirmation:
+                  type: string
+              required:
+                - name
+                - email
+                - password
+                - password_confirmation
+      responses:
+        '302':
+          description: "Redirect after registration. Access: PUB"
+
+  /forgot-password:
+    get:
+      summary: "Show Password Recovery Form"
+      description: "Password recovery form displayed. Access: USR, MOD, ADM"
+      operationId: showPasswordRecoveryForm
+      tags:
+        - "M01: Authentication"
+      responses:
+        '200':
+          description: "Password recovery form displayed. Access: USR, MOD, ADM"
+    post:
+      summary: "Send Password Reset Link"
+      description: "Send password reset link and redirect. Access : PUB"
+      operationId: sendPasswordResetLink
+      tags:
+        - "M01: Authentication"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+      responses:
+        '302':
+          description: "Redirect after sending reset link. Access: PUB"
+
+  /users:
+    get:
+      summary: "List Users"
+      description: "List of users retrieved successfully. Access: PUB"
+      operationId: listUsers
+      tags:
+        - "M02: Profile"
+      responses:
+        '200':
+          description: "List of users retrieved successfully. Access: PUB"
+
+  /users/{id}:
+    get:
+      summary: "Show User Profile"
+      description: "User profile displayed. Access : USR, MOD, ADM"
+      operationId: showUserProfile
+      tags:
+        - "M02: Profile"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "User profile displayed. Access: USR, MOD, ADM"
+    post:
+      summary: "Update User Information"
+      description: "Update user information and redirect. Access : USR, MOD, ADM"
+      operationId: updateUserInformation
+      tags:
+        - "M02: Profile"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+              required:
+                - name
+                - email
+      responses:
+        '302':
+          description: "Redirect after updating user. Access: USR, MOD, ADM"
+    delete:
+      summary: "Delete User"
+      description: "Delete user and redirect. Access: USR, MOD, ADM"
+      operationId: deleteUser
+      tags:
+        - "M02: Profile"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '302':
+          description: "Redirect after deleting user."
+
+  /users/{id}/edit:
+    get:
+      summary: "Show Edit User Form"
+      description: "Edit user form displayed. Access: USR, MOD, ADM"
+      operationId: editUser
+      tags:
+        - "M02: Profile"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Edit user form displayed. Access: USR, MOD, ADM"
+
+  /users/{id}/badges:
+    get:
+      summary: "List User Badges"
+      description: "List of user badges retrieved successfully. Access: USR, MOD, ADM"
+      operationId: listUserBadges
+      tags:
+        - "M02: Profile"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "List of user badges retrieved successfully. Access: USR, MOD, ADM"
+
+  /users/{id}/bookmarks:
+    get:
+      summary: "Show User Bookmarks"
+      description: "User bookmarks displayed. Access: USR, MOD, ADM"
+      operationId: showUserBookmarks
+      tags:
+        - "M02: Profile"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "User bookmarks displayed. Access: USR, MOD, ADM"
+
+  /questions:
+    get:
+      summary: "List Questions"
+      description: "List of questions retrieved successfully. Access: USR, OWN, MOD, ADM"
+      operationId: listQuestions
+      tags:
+        - "M03: Questions"
+      responses:
+        '200':
+          description: "List of questions retrieved successfully. Access: USR, MOD, ADM"
+    post:
+      summary: "Create New Question"
+      description: "Create new question and redirect. Access: OWN, MOD, ADM"
+      operationId: createQuestion
+      tags:
+        - "M03: Questions"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - title
+                - content
+                - tags
+      responses:
+        '302':
+          description: "Redirect after creating question. Access: OWN, MOD, ADM"
+
+  /questions/{id}:
+    get:
+      summary: "Show Question Details"
+      description: "Question details displayed. Access: OWN, MOD, ADM"
+      operationId: showQuestionDetails
+      tags:
+        - "M03: Questions"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Question details displayed. Access: OWN, MOD, ADM"
+    post:
+      summary: "Update Question"
+      description: "Update question and redirect. Access: OWN, MOD, ADM"
+      operationId: updateQuestion
+      tags:
+        - "M03: Questions"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - title
+                - content
+      responses:
+        '302':
+          description: "Redirect after updating question. Access: OWN, MOD, ADM"
+    delete:
+      summary: "Delete Question"
+      description: "Delete question and redirect. Access: OWN, MOD, ADM"
+      operationId: deleteQuestion
+      tags:
+        - "M03: Questions"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '302':
+          description: "Redirect after deleting question. Access: OWN, MOD, ADM"
+
+  /questions/create:
+    get:
+      summary: "Show Create Question Form"
+      description: "Create question form displayed. Access: OWN, MOD, ADM"
+      operationId: showCreateQuestionForm
+      tags:
+        - "M03: Questions"
+      responses:
+        '200':
+          description: "Create question form displayed. Access: OWN, MOD, ADM"
+
+  /questions/{id}/edit:
+    get:
+      summary: "Show Edit Question Form"
+      description: "Edit question form displayed. Access: OWN, MOD, ADM"
+      operationId: showEditQuestionForm
+      tags:
+        - "M03: Questions"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Edit question form displayed. Access: OWN, MOD, ADM"
+
+  /questions/{id}/vote:
+    post:
+      summary: "Vote on Question"
+      description: "Vote on question and redirect. Access: USR, MOD, ADM"
+      operationId: voteQuestion
+      tags:
+        - "M03: Questions"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                vote:
+                  type: string
+                  enum: [up, down]
+              required:
+                - vote
+      responses:
+        '302':
+          description: "Redirect after voting. Access: OWN, MOD, ADM"
+
+  /questions/{id}/tag:
+    post:
+      summary: "Add Tag to Question"
+      description: "Add tag to question and redirect. Access: MOD, ADM"
+      operationId: addTagToQuestion
+      tags:
+        - "M03: Questions"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                tag:
+                  type: string
+              required:
+                - tag
+      responses:
+        '302':
+          description: "Redirect after adding tag. Access: MOD, ADM"
+
+  /questions/{id}/bookmark:
+    post:
+      summary: "Toggle Bookmark on Question"
+      description: "Toggle bookmark on question and redirect. Access: USR, MOD, ADM"
+      operationId: toggleBookmarkQuestion
+      tags:
+        - "M03: Questions"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '302':
+          description: "Redirect after toggling bookmark. Access: USR, MOD, ADM"
+
+  /answers:
+    post:
+      summary: "Create Answer to Question"
+      description: "Create answer to question and redirect. Access: USR, MOD, ADM"
+      operationId: createAnswer
+      tags:
+        - "M04: Answers"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                id_user:
+                  type: integer
+                id_question:
+                  type: integer
+              required:
+                - content
+                - id_user
+                - id_question
+      responses:
+        '302':
+          description: "Redirect after creating answer. Access: USR, MOD, ADM"
+
+  /answers/{id}:
+    post:
+      summary: "Update Answer"
+      description: "Update answer and redirect. Access: OWN, MOD, ADM"
+      operationId: updateAnswer
+      tags:
+        - "M04: Answers"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+      responses:
+        '302':
+          description: "Redirect after updating answer. Access: OWN, MOD, ADM"
+
+  /answers/{id}/delete:
+    post:
+      summary: "Delete Answer"
+      description: "Delete answer and redirect. Access: USR, MOD, ADM"
+      operationId: deleteAnswer
+      tags:
+        - "M04: Answers"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '302':
+          description: "Redirect after deleting answer. Access: OWN, MOD, ADM"
+
+  /answers/{id}/vote:
+    post:
+      summary: "Vote on Answer"
+      description: "Vote on answer and redirect. Access: USR, MOD, ADM"
+      operationId: voteAnswer
+      tags:
+        - "M04: Answers"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                vote:
+                  type: string
+                  enum: [up, down]
+              required:
+                - vote
+      responses:
+        '302':
+          description: "Redirect after voting. Access: USR, MOD, ADM"
+
+  /answers/{id}/valid:
+    post:
+      summary: "Mark Answer as Valid"
+      description: "Mark answer as valid and redirect. Access: OWN, MOD, ADM"
+      operationId: markAnswerAsValid
+      tags:
+        - "M04: Answers"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '302':
+          description: "Redirect after marking answer as valid. Access: OWN, MOD, ADM"
+
+  /answer_comments:
+    post:
+      summary: "Add Comment to Answer"
+      description: "Add comment to answer and redirect. Access: USR, MOD, ADM"
+      operationId: storeAnswerComment
+      tags:
+        - "M05: Comments"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                answer_id:
+                  type: integer
+                content:
+                  type: string
+              required:
+                - answer_id
+                - content
+      responses:
+        '302':
+          description: "Redirect after adding comment to answer. Access: USR, MOD, ADM"
+
+  /answer_comments/{id}:
+    post:
+      summary: "Update Answer Comment"
+      description: "Update answer comment and redirect. Access: OWN, MOD, ADM"
+      operationId: updateAnswerComment
+      tags:
+        - "M05: Comments"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+      responses:
+        '302':
+          description: "Redirect after updating answer comment. Access: OWN, MOD, ADM"
+
+  /answer_comments/{id}/delete:
+    post:
+      summary: "Delete Answer Comment"
+      description: "Delete answer comment and redirect. Access: OWN, MOD, ADM"
+      operationId: deleteAnswerComment
+      tags:
+        - "M05: Comments"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '302':
+          description: "Redirect after deleting answer comment. Access: OWN, MOD, ADM"
+
+  /question_comments:
+    post:
+      summary: "Add Comment to Question"
+      description: "Add comment to question and redirect. Access: USR, MOD, ADM"
+      operationId: storeQuestionComment
+      tags:
+        - "M05: Comments"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                question_id:
+                  type: integer
+                content:
+                  type: string
+              required:
+                - question_id
+                - content
+      responses:
+        '302':
+          description: "Redirect after adding comment to question. Access: USR, MOD, ADM"
+
+  /question_comments/{id}:
+    post:
+      summary: "Update Question Comment"
+      description: "Update question comment and redirect. Access: OWN, MOD, ADM"
+      operationId: updateQuestionComment
+      tags:
+        - "M05: Comments"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+      responses:
+        '302':
+          description: "Redirect after updating question comment. Access: OWN, MOD, ADM"
+
+  /question_comments/{id}/delete:
+    post:
+      summary: "Delete Question Comment"
+      description: "Delete question comment and redirect. Access: OWN, MOD, ADM"
+      operationId: deleteQuestionComment
+      tags:
+        - "M05: Comments"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '302':
+          description: "Redirect after deleting question comment. Access: OWN, MOD, ADM"
+
+  /api/profiles:
+    get:
+      summary: "Search Profiles"
+      description: "Profile search results returned successfully. Access: USR, MOD, ADM"
+      operationId: searchProfiles
+      tags:
+        - "M06: Search"
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: object
+      responses:
+        '200':
+          description: "Profile search results returned successfully. Access: USR, MOD, ADM"
+
+  /api/questions:
+    get:
+      summary: "Search Questions"
+      description: "Question search results returned successfully. Access: USR, MOD, ADM"
+      operationId: searchQuestions
+      tags:
+        - "M06: Search"
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "Question search results returned successfully. Access: USR, MOD, ADM"
+
+  /api/tags:
+    get:
+      summary: "Search Tags"
+      description: "Tag search results returned successfully. Access: USR, MOD, ADM"
+      operationId: searchTags
+      tags:
+        - "M06: Search"
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "Tag search results returned successfully. Access: USR, MOD, ADM"
+
+  /question_comment_notifications/{id}:
+    get:
+      summary: "List Question Comment Notifications"
+      description: "List of question comment notifications retrieved successfully. Access: USR, MOD, ADM"
+      operationId: listQuestionCommentNotifications
+      tags:
+        - "M07: Notifications"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "List of question comment notifications retrieved successfully. Access: USR, MOD, ADM"
+    delete:
+      summary: "Delete Question Comment Notification"
+      description: "Notification deleted successfully. Access: USR, MOD, ADM"
+      operationId: deleteQuestionCommentNotification
+      tags:
+        - "M07: Notifications"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: "Notification deleted successfully. Access: USR, MOD, ADM"
+
+  /answer_comment_notifications/{id}:
+    get:
+      summary: "List Answer Comment Notifications"
+      description: "List of answer comment notifications retrieved successfully. Access: USR, MOD, ADM"
+      operationId: listAnswerCommentNotifications
+      tags:
+        - "M07: Notifications"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "List of answer comment notifications retrieved successfully. Access: USR, MOD, ADM"
+    delete:
+      summary: "Delete Answer Comment Notification"
+      description: "Notification deleted successfully. Access: USR, MOD, ADM"
+      operationId: deleteAnswerCommentNotification
+      tags:
+        - "M07: Notifications"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: "Notification deleted successfully. Access: USR, MOD, ADM"
+
+  /answer_notifications/{id}:
+    get:
+      summary: "List Answer Notifications"
+      description: "List of answer notifications retrieved successfully. Access: USR, MOD, ADM"
+      operationId: listAnswerNotifications
+      tags:
+        - "M07: Notifications"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "List of answer notifications retrieved successfully. Access: USR, MOD, ADM"
+    delete:
+      summary: "Delete Answer Notification"
+      description: "Notification deleted successfully. Access: USR, MOD, ADM"
+      operationId: deleteAnswerNotification
+      tags:
+        - "M07: Notifications"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: "Notification deleted successfully. Access: USR, MOD, ADM"
+
+  /aboutUs:
+    get:
+      summary: "About Us Page"
+      description: "About Us page displayed. Access: PUB"
+      operationId: aboutUs
+      tags:
+        - "M08: Static Pages"
+      responses:
+        '200':
+          description: "About Us page displayed. Access: PUB"
+
+  /contactUs:
+    get:
+      summary: "Contact Us Page"
+      description: "Contact Us page displayed. Access: PUB"
+      operationId: contactUs
+      tags:
+        - "M08: Static Pages"
+      responses:
+        '200':
+          description: "Contact Us page displayed. Access: PUB"
+    post:
+      summary: "Submit Contact Form"
+      description: "Redirect after submitting contact form. Access: USR"
+      operationId: submitContactForm
+      tags:
+        - "M08: Static Pages"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                message:
+                  type: string
+              required:
+                - name
+                - email
+                - message
+      responses:
+        '302':
+          description: "Redirect after submitting contact form. Access: USR"
+
+  /faq:
+    get:
+      summary: "FAQ Page"
+      description: "FAQ page displayed. Access: PUB"
+      operationId: faq
+      tags:
+        - "M08: Static Pages"
+      responses:
+        '200':
+          description: "FAQ page displayed. Access: PUB"
+
+  /tags:
+    get:
+      summary: "List Tags"
+      description: "List of tags retrieved successfully. Access: PUB"
+      operationId: listTags
+      tags:
+        - "M08: Static Pages"
+      responses:
+        '200':
+          description: "List of tags retrieved successfully. Access: PUB"
+    post:
+      summary: "Create New Tag"
+      description: "Tag created successfully. Access: PUB"
+      operationId: createTag
+      tags:
+        - "M08: Static Pages"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+      responses:
+        '201':
+          description: "Tag created successfully. Access: PUB"
+
+  /tags/{id}:
+    get:
+      summary: "Show Tag Details"
+      description: "Tag details displayed. Access: PUB"
+      operationId: showTag
+      tags:
+        - "M08: Static Pages"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Tag details displayed. Access: PUB"
+    put:
+      summary: "Update Tag"
+      description: "Tag updated successfully. Access: MOD, ADM"
+      operationId: updateTag
+      tags:
+        - "M08: Static Pages"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+      responses:
+        '200':
+          description: "Tag updated successfully. Access: MOD, ADM"
+    delete:
+      summary: "Delete Tag"
+      description: "Tag deleted successfully. Access: MOD, ADM"
+      operationId: deleteTag
+      tags:
+        - "M08: Static Pages"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: "Tag deleted successfully. Access: MOD, ADM"
+
+  /tags/create:
+    get:
+      summary: "Show Create Tag Form"
+      description: "Create tag form displayed. Access: MOD, ADM"
+      operationId: showCreateTagForm
+      tags:
+        - "M08: Static Pages"
+      responses:
+        '200':
+          description: "Create tag form displayed. Access: MOD, ADM"
+
+  /tags/{id}/edit:
+    get:
+      summary: "Show Edit Tag Form"
+      description: "Edit tag form displayed. Access: MOD, ADM"
+      operationId: showEditTagForm
+      tags:
+        - "M08: Static Pages"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Edit tag form displayed. Access: MOD, ADM"
+
+  /submit-contact-form:
+    post:
+      summary: "Submit Contact Form"
+      description: "Redirect after submitting contact form. Access: USR"
+      operationId: submitContactFormAlternative
+      tags:
+        - "M08: Static Pages"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                message:
+                  type: string
+              required:
+                - name
+                - email
+                - message
+      responses:
+        '302':
+          description: "Redirect after submitting contact form. Access: USR"

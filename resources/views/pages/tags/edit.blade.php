@@ -1,0 +1,1 @@
+<!-- only for administrators, just like the create view for the tags, but the tag name is already filled with the current tag name, the administrator can then modify it and press update for the changes to take effect -->
